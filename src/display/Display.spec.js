@@ -30,28 +30,33 @@ test("displays if gate is open/closed and if it is locked/unlocked", () => {
   });
 
   test("displays 'Closed' if the `closed` prop is `true` and 'Open' if otherwise", () => {
-      const closed = true;
+      let closed = true;
 
       const toggleClosed = () => {
-          return !closed;
+          closed = !closed;
       }
 
-      const {getByText, findByText} = render(<Display closed={closed} />);
+      const {getByText, findByText, rerender} = render(<Display closed={closed} />);
 
       const closedLed = getByText(/closed/i);
-      expect(closedLed).toBeDefined();
+      expect(closedLed).toHaveClass('red-led');
 
       toggleClosed();
 
-      const openLed = findByText(/open/i);
-      expect(openLed).toBeDefined();
+      rerender(<Display closed={closed} />);
+
+      expect(closedLed).toHaveClass('green-led');
+
+    //   const openLed = findByText(/open/i);
+    //   expect(openLed).toHaveClass('green-led');
+
   });
 
 test("displays 'Locked' if the `locked` prop is `true` and 'Unlocked' if otherwise", () => {
     const locked = true;
 
     const toggleLocked = () => {
-        return !locked;
+        locked = !locked;
     }
 
     const {getByText, findByText} = render(<Display locked={locked} />);
